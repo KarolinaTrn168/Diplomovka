@@ -1,2 +1,6 @@
 BaseURL: https://petstore.swagger.io/v2
 GET /pet/findByStatus?status=pending
+BaseURL: https://petstore.swagger.io/v2
+GET /pet/findByStatus?status={status}
+BaseURL: https://petstore.swagger.io/v2
+GET /pet/findByStatus?status={status}

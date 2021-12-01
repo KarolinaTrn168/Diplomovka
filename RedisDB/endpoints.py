@@ -7,7 +7,7 @@ baseURL = ""
 
 def get_endpoints():
     global baseURL
-    endpoints_file = open("/home/karo/Desktop/Diplomovka/endpoints.txt", "r")
+    endpoints_file = open("/home/karo/Desktop/Diplomka/Diplomovka/endpoints.txt", "r")
     for endpoints in endpoints_file:
         if endpoints.startswith("baseURL:"):
             baseURL = endpoints.strip().split(' ')[1]
