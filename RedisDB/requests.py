@@ -5,7 +5,7 @@ def get_method(baseURL, endpoint):
     print("get request")
     response = requests.get(baseURL+endpoint)
     print(response)
-    print("Response: ", response.json())
+    #print("Response: ", response.json())
 
 def post_method():
     print("post request")

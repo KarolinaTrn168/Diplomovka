@@ -1,6 +1,8 @@
 from os import error
-from RedisDB import redisConfig
-from RedisDB import requests
+from RedisDB import redisConfig, requests
+import generateData
+import re
+
 baseURL = ""
 
 def get_endpoints():
@@ -22,12 +24,18 @@ def get_endpoints():
 
 
 def perform_requests():
+    generateData.generate_data()
+    print(generateData.data_list)
     backup_file = open("backup.txt", "a")
     backup_file.write("BaseURL: %s\n" %(baseURL))
     method = redisConfig.r.lpop(baseURL).decode('utf8')
     endpoint = redisConfig.r.lpop(baseURL).decode('utf8')
     backup_file.write("%s %s\n" %(method, endpoint))
     if method == 'GET':
+        data_pattern = re.sub("{.*}", generateData.data_list[0], endpoint)
+        if data_pattern:
+            endpoint = data_pattern
+            print(endpoint)
         requests.get_method(baseURL, endpoint)
     elif method == 'POST':
         requests.post_method()
