@@ -1,27 +1,16 @@
-from os import error
 from RedisDB import redisConfig, requests
-import generateData
+import maybe.generateData as generateData
 import re
+import os
 
 baseURL = ""
 
 def get_endpoints():
-    global baseURL
-    endpoints_file = open("/home/karo/Desktop/Diplomka/Diplomovka/endpoints.txt", "r")
-    for endpoints in endpoints_file:
-        if endpoints.startswith("baseURL:"):
-            baseURL = endpoints.strip().split(' ')[1]
-        else:
-            endpoint = endpoints.strip().split(' ')[1]
-            method = endpoints.strip().split(' ')[0]
-            redisConfig.r.rpush(baseURL, method.encode('utf8'))
-            redisConfig.r.rpush(baseURL, endpoint)
-        
-    print("============================================= \n")
-    print(redisConfig.r.lrange(baseURL, 0, -1))
-
-    perform_requests()
-
+    # crawling website 
+    os.system('~/Desktop/Diplomka/crawlergo-0.4.2/cmd/crawlergo/crawlergo_cmd -c ~/Downloads/chrome-linux/chrome -t 15 https://www.dictionary.com/ > crawling_output.txt')
+    # get method and URL, print into txt 
+    os.system('grep -w \'GET\|POST\|PUT\|DELETE\' ./crawling_output.txt > all_endpoints.txt')
+    os.system('cut -d " " -f 1-2 all_endpoints.txt | uniq -u > working_endpoints.txt')
 
 def perform_requests():
     generateData.generate_data()
@@ -45,4 +34,4 @@ def perform_requests():
         requests.delete_method()
     else:
         print("Not a valid method!")
-        return error
+        return os.error

@@ -1,3 +1,3 @@
-from RedisDB import endpoints
+from RedisDB import crawlingEndpoints
 
-endpoints.get_endpoints()
+crawlingEndpoints.get_endpoints()

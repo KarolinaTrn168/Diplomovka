@@ -1,0 +1,34 @@
+{
+    "redis": {
+        "host_redis": [
+            "Hostname",
+            "kdsljf",
+            "osihfow"
+        ],
+        "port_redis": 11111,
+        "debug_redis": "true"
+    },
+    "canaries_api": {
+        "username_api": "Username",
+        "password_api": "Password",
+        "url_api": "URL",
+        "version_api": "Version"
+    }
+}{
+    "redis": {
+        "host_redis": [
+            "Hostname",
+            "kdsljf",
+            "osihfow"
+        ],
+        "port_redis": 11111,
+        "debug_redis": "true"
+    },
+    "canaries_api": {
+        "username_api": "Username",
+        "password_api": "Password",
+        "url_api": "URL",
+        "version_api": "Version"
+    },
+    "id": "38459"
+}
