@@ -1,5 +1,0 @@
-baseURL: https://petstore.swagger.io/v2
-GET /pet/findByStatus?status={status}
-GET /pet/20
-POST /pet/20
-GET /store/inventory
