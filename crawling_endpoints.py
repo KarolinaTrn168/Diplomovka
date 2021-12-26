@@ -1,4 +1,5 @@
-from RedisDB import redisConfig, requests
+from .RedisDB import requests
+from RedisDB import connection_redis
 import maybe.generateData as generateData
 import re
 import os
@@ -17,8 +18,8 @@ def perform_requests():
     print(generateData.data_list)
     backup_file = open("backup.txt", "a")
     backup_file.write("BaseURL: %s\n" %(baseURL))
-    method = redisConfig.r.lpop(baseURL).decode('utf8')
-    endpoint = redisConfig.r.lpop(baseURL).decode('utf8')
+    method = connection_redis.r.lpop(baseURL).decode('utf8')
+    endpoint = connection_redis.r.lpop(baseURL).decode('utf8')
     backup_file.write("%s %s\n" %(method, endpoint))
     if method == 'GET':
         data_pattern = re.sub("{.*}", generateData.data_list[0], endpoint)

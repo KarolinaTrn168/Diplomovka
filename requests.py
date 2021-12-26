@@ -1,4 +1,4 @@
-from RedisDB import crawlingEndpoints
+from . import crawling_endpoints
 import requests
 
 def get_method(baseURL, endpoint):

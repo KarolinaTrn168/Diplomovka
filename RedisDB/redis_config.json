@@ -1,0 +1,8 @@
+{
+    "redis": {
+        "host_redis": "localhost",
+        "port_redis": 6379,
+        "debug_redis": true,
+        "db_redis": 0
+    }
+}
