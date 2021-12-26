@@ -3,4 +3,4 @@ random_word/
 all_endpoints.txt
 crawling_output.txt
 working_endpoints.txt
-./RedisDB/redis_config.json
+/RedisDB/redis_config.json
