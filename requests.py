@@ -1,4 +1,4 @@
-from . import crawling_endpoints
+from .LearningMode import crawling_endpoints
 import requests
 
 def get_method(baseURL, endpoint):
