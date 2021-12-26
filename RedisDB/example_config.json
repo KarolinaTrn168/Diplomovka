@@ -1,0 +1,8 @@
+{
+    "redis": {
+        "host_redis": "hostname",
+        "port_redis": 1234,
+        "debug_redis": true,
+        "db_redis": 0
+    }
+}
