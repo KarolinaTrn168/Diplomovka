@@ -5,10 +5,9 @@ with open('/home/karo/Desktop/Diplomka/Diplomovka/configurations.json', encoding
         Config = json.load(config_file)
 
 mydb, mycursor = connection_sql.connection_sql()
-createdb = "CREATE DATABASE IF NOT EXISTS %s"
 db = Config['sql']['db_sql']
-createtbl = "CREATE TABLE IF NOT EXISTS test_table_1 (parameter_1 VARCHAR(255), parameter_2 VARCHAR(255), parameter_3 VARCHAR(255))"
-insertion = "INSERT INTO test_table_1 (parameter_1, parameter_2, parameter_3) VALUES (%s, %s, %s)"
+tbl = 'test_table_1'    # will be the name of basic URL
+insertion = "INSERT INTO test_table_1 (parameter_1, parameter_2, parameter_3) VALUES (%s, %s, %s)" #parameter will be parameter from URL and its values get from logs
 values = [
     ('jdbf', '3249', '/.]jif'),
     ('kej', '45', '/.]]*'),
@@ -30,9 +29,9 @@ values = [
     
 ]
 
-mycursor.execute("CREATE DATABASE IF NOT EXISTS testdb")
-mycursor.execute("USE testdb")
-mycursor.execute(createtbl)
+mycursor.execute("CREATE DATABASE IF NOT EXISTS %s" % db)
+mycursor.execute("USE %s" % db)
+mycursor.execute("CREATE TABLE IF NOT EXISTS %s (parameter_1 VARCHAR(255), parameter_2 VARCHAR(255), parameter_3 VARCHAR(255))" % tbl)
 mycursor.executemany(insertion, values)
 
 mydb.commit()
