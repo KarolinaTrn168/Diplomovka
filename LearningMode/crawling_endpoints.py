@@ -1,5 +1,4 @@
-# from .. import requests
-import RedisDB.connection_redis
+import RedisDB
 import re
 import os
 
@@ -15,9 +14,7 @@ def get_endpoints():
 def get_baseURL():
     endpoints = open ('working_endpoints.txt', 'r')
     baseURL = endpoints.readline().split(' ')[1]
-    print(baseURL)
-
-get_baseURL()
+    return baseURL
 
 # def perform_requests():
 #     generateData.generate_data()
