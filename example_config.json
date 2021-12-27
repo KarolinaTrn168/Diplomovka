@@ -4,5 +4,10 @@
         "port_redis": 1234,
         "debug_redis": true,
         "db_redis": 0
+    }, 
+    "sql": {
+        "host_sql": "hostname",
+        "user_sql": "username",
+        "password_sql": "password"
     }
 }
