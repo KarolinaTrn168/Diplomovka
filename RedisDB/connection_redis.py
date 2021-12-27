@@ -2,7 +2,7 @@ import redis
 import json
 
 def connection_redis():
-    with open('/home/karo/Desktop/Diplomka/Diplomovka/RedisDB/redis_config.json', encoding='utf8') as config_file:
+    with open('/home/karo/Desktop/Diplomka/Diplomovka/configurations.json', encoding='utf8') as config_file:
         Config = json.load(config_file)
     try:
         # print(dir(redis))
@@ -14,7 +14,7 @@ def connection_redis():
         exit('Failed.')
     return r      
         
-        
+connection_redis()
     # r.set('dictionary.com', 'https://www.dictionary.com/')
     # r.delete('https://petstore.swagger.io/v2')
     # print(r.get('https://petstore.swagger.io/v2'))
