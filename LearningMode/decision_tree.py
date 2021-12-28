@@ -8,33 +8,30 @@ with open('/home/karo/Desktop/Diplomka/Diplomovka/configurations.json', encoding
 mydb, mycursor = connection_sql()
 db = Config['sql']['db_sql']
 tbl = 'test_table_1'    # will be the name of basic URL
+column_names_list = []; values_list = []
+i = 0; j = 0
 
 mycursor.execute("USE %s" % db)
-
-# get the number of columns in table
-mycursor.execute("SELECT COUNT(*) FROM information_schema.columns WHERE table_name='test_table_1'")
-col=mycursor.fetchall()
-# print("columns: ", col[-1][-1])
-columns = col[-1][-1]
-
-i = 0 
-while i <= columns:
-    print(i)
+# get the name (and count from list) of columns in table
+mycursor.execute("SELECT COLUMN_NAME FROM information_schema.columns WHERE table_name='%s'" % tbl)
+column_count=mycursor.fetchall()
+while i < len(column_count):
+    column_names_list.append(column_count[i][-1])
     i = i+1
+print("list: ", column_names_list)
 
-names_list = []
-# get the name of columns in table
-mycursor.execute("SELECT COLUMN_NAME FROM information_schema.columns WHERE table_name='test_table_1'")
-names=mycursor.fetchall()
-print("names: ", names)
-print("length: ", len(names))
-
-i = 0 
-while i < len(names):
-    names_list.append(names[i][-1])
-    i = i+1
-
-print("list: ", names_list)
+while j < len(column_names_list):
+    # get the values from the column
+    print("column name: ", column_names_list[j])
+    mycursor.execute("SELECT %s FROM %s" % (column_names_list[j], tbl))
+    values = mycursor.fetchall()
+    while i < len(values):
+        values_list.append(values[i][-1])
+        i = i+1
+    print("values are: ", values_list)
+    i = 0
+    values_list.clear()
+    j = j+1
 
 # go to db
 # for each column make:
