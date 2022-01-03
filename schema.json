@@ -1,6 +1,6 @@
 {
     "https://example_url.com": {
-        "param1": "equal",
+        "param1": "abc",    
         "param2": "lower_upper_number",
         "param3": "lower_upper",
         "param4": "lower",
