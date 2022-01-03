@@ -1,34 +1,18 @@
 {
-    "redis": {
-        "host_redis": [
-            "Hostname",
-            "kdsljf",
-            "osihfow"
-        ],
-        "port_redis": 11111,
-        "debug_redis": "true"
+    "https://example_url.com": {
+        "param1": "equal",
+        "param2": "lower_upper_number",
+        "param3": "lower_upper",
+        "param4": "lower",
+        "param5": "upper",
+        "param6": "lower_number",
+        "param7": "upper_number",
+        "param8": "number"
     },
-    "canaries_api": {
-        "username_api": "Username",
-        "password_api": "Password",
-        "url_api": "URL",
-        "version_api": "Version"
+    "https://second_example.com": {
+        "param1": "upper",
+        "param2": "lower_number",
+        "param3": "upper_number",
+        "param4": "number"
     }
-}{
-    "redis": {
-        "host_redis": [
-            "Hostname",
-            "kdsljf",
-            "osihfow"
-        ],
-        "port_redis": 11111,
-        "debug_redis": "true"
-    },
-    "canaries_api": {
-        "username_api": "Username",
-        "password_api": "Password",
-        "url_api": "URL",
-        "version_api": "Version"
-    },
-    "id": "38459"
 }
