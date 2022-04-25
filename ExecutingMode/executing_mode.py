@@ -18,7 +18,7 @@ def upper_numbers(value):
     return bool(valid and not invalid)
 
 def executing():
-    parameter = 'param1'
+    parameter = 'param4'
     url = 'https://example_url.com'
     value = 'abc'
     with open('schema.json', 'r+', encoding='utf8') as j:
@@ -27,41 +27,41 @@ def executing():
 
     if json_data[url][parameter] == "lower_upper_number":
         if any(char.isdigit() for char in value) and any(char.isalpha() for char in value):
-            print("Parameter is accepted: ", value)
+            print("Parameter is accepted (lower, upper, number): ", value)
         else:
             print("Wrong prameter: ", value)
     elif json_data[url][parameter] == "lower_upper":
         if value.isalpha():
-            print("Parameter is accepted: ", value)
+            print("Parameter is accepted (lower, upper): ", value)
         else:
             print("Wrong prameter: ", value)
     elif json_data[url][parameter] == "lower":
         if value.isalpha() and value.islower():
-            print("Parameter is accepted: ", value)
+            print("Parameter is accepted (lower): ", value)
         else:
             print("Wrong prameter: ", value)
     elif json_data[url][parameter] == "upper":
         if value.isalpha() and value.isupper():
-            print("Parameter is accepted: ", value)
+            print("Parameter is accepted (upper): ", value)
         else:
             print("Wrong prameter: ", value)
     elif json_data[url][parameter] == "lower_number":
         if value.isdigit() or (value.isalpha() and value.islower()) or (lower_numbers(value) == True):
-            print("Parameter is accepted: ", value)
+            print("Parameter is accepted (lower, number): ", value)
         else:
             print("Wrong prameter: ", value)
     elif json_data[url][parameter] == "upper_number":
         if value.isdigit() or (value.isalpha() and value.isupper()) or (upper_numbers(value) == True):
-            print("Parameter is accepted: ", value)
+            print("Parameter is accepted (upper, number): ", value)
         else:
             print("Wrong prameter: ", value)
     elif json_data[url][parameter] == "number":
         if value.isdigit():
-            print("Parameter is accepted: ", value)
+            print("Parameter is accepted (number): ", value)
         else:
             print("Wrong prameter: ", value)
     else:   #equal
         if value == json_data[url][parameter]:
-            print("Parameter is accepted: ", value)
+            print("Parameter is accepted (equal): ", value)
         else:
             print("Wrong prameter: ", value)
