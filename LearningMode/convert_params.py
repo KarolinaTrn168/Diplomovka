@@ -1,6 +1,8 @@
+from itertools import count
 import json
 import string
 from SQLdb.connection_sql import connection_sql
+
 ################################################################################################################################
 
 # The values will be converted into number format, to make it easier to work with them for the machine learning algorithms
@@ -19,7 +21,7 @@ from SQLdb.connection_sql import connection_sql
 # special = amount of special characters
 # pos_num = position where the numbers are 
 # pos_upper = position where the upper case letters are 
-# inter = position where the interpunctions are (for sentences for example)
+# pos_inter = position where the interpunctions are (for sentences for example)
 
 # Length:
 # len = amount of characters in the value
@@ -38,18 +40,78 @@ db = Config['sql']['db_sql']
 mycursor.execute("SELECT Val FROM Val WHERE Format=''")
 myresult = []
 for x in mycursor.fetchall():
-    myresult.extend(x)      # pole jednotlivych hodnot
+    myresult.extend(x)      # list of all values
 print(myresult) 
 print(len(myresult))
+
+#definition of char types for format
+lower = string.ascii_lowercase
+upper = string.ascii_uppercase
+digits = string.digits
+interp = {".", ",", ";", ":", "?", "!", "-", "(", ")"}
+special = string.punctuation
 
 # from the array convert every string
 format = ""
 counter = ""
-length = 0
 i = 0
-while len(myresult) >= i:
-    actual_parameter = myresult[i]
 
+count = lambda l1,l2: sum([1 for x in l1 if x in l2])
+
+while len(myresult) > i:
+    actual_value = myresult[i]
+    format = ""
+    if any(character.islower() for character in actual_value):
+        format = "".join((format, "1"))
+    else: 
+        format = "".join((format, "0"))
+    if any(character.isupper() for character in actual_value):
+        format = "".join((format, "2"))
+    else: 
+        format = "".join((format, "0"))
+    if any(character.isdigit() for character in actual_value):
+        format = "".join((format, "3"))
+    else: 
+        format = "".join((format, "0"))
+    if any(ip in actual_value for ip in interp):
+        format = "".join((format, "4"))
+    else: 
+        format = "".join((format, "0"))
+    if any(sp in actual_value for sp in special):
+        format = "".join((format, "5"))
+    else: 
+        format = "".join((format, "0"))
+
+    counter = ""
+    c1 = sum(c.isdigit() for c in actual_value)
+    counter = "".join((counter, str(c1)))
+    c2 = sum(c.isupper() for c in actual_value)
+    c3 = actual_value.count("." or "," or ";" or ":" or "?" or "!" or "-" or "(" or ")")   # toto checknut
+    c4 = count(actual_value, set(string.punctuation))
+    c5 = ""
+    c6 = ""
+    c7 = ""
+    if c1 > 0:                                      # if there are numbers, find out on which position
+        for c in range(0, len(actual_value)):
+            if actual_value[c] == "1" or actual_value[c] == "2" or actual_value[c] == "3"\
+            or actual_value[c] == "4" or actual_value[c] == "5" or actual_value[c] == "6"\
+            or actual_value[c] == "7" or actual_value[c] == "8" or actual_value[c] == "9"\
+            or actual_value[c] == "0":
+                if c5 == "":
+                    c5 = "".join((c5, str(c+1)))
+                else:
+                    c5 = ",".join((c5, str(c+1)))
+    else:
+        c5 = "0"
+    
+    counter = ";".join((counter, str(c2), str(c3), str(c4), c5))
+  
+    # Update only the first parameter that has the val = actual_value and format = ""
+    mycursor.execute("UPDATE Val SET Format = '%s', Length = '%s' WHERE Val = '%s' AND Format = '' LIMIT 1" % (format, len(actual_value), actual_value))
+    
+
+    
+    mydb.commit()
     i = i+1
 
 # save the result into the database (save it there, where value = converted value)
