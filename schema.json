@@ -1,0 +1,24 @@
+{
+    "https://example_url.com": {
+        "param1": "abc",
+        "param2": "lower_upper_number",
+        "param3": "lower_upper",
+        "param4": "lower",
+        "param5": "upper",
+        "param6": "lower_number",
+        "param7": "upper_number",
+        "param8": "number"
+    },
+    "https://second_example.com": {
+        "param1": "upper",
+        "param2": "lower_number",
+        "param3": "upper_number",
+        "param4": "number"
+    },
+    "www.url4.com": {
+        "Parameter1223": "valueee123"
+    },
+    "www.url1.com": {
+        "extra": []
+    }
+}
