@@ -31,7 +31,7 @@ from SQLdb.connection_sql import connection_sql
 def convert_values():
     # load the DB and initialize mydb and mycursor
     with open('/home/karo/Desktop/Diplomka/Diplomovka/configurations.json', encoding='utf8') as config_file:
-            Config = json.load(config_file)
+        Config = json.load(config_file)
 
     mydb, mycursor = connection_sql()
     db = Config['sql']['db_sql']
