@@ -14,12 +14,12 @@ insertion = "INSERT INTO URLs (URL) VALUES (%s)" #parameter will be parameter fr
 mycursor.execute("CREATE DATABASE IF NOT EXISTS %s" % db)
 mycursor.execute("USE %s" % db)
 # fill URL table
-# mycursor.execute("CREATE TABLE IF NOT EXISTS %s (id_url int NOT NULL AUTO_INCREMENT, URL VARCHAR(255), PRIMARY KEY (id_url))" % tbl_url)
-# mycursor.execute("INSERT INTO URLs (URL) VALUES ('www.url1.com'), ('www.url2.com'), ('www.url3.com'), ('www.url4.com'), ('www.url5.com'), ('www.url6.com'), ('www.url7.com'), ('www.url8.com'), ('www.url9.com'), ('www.url10.com'), ('www.url11.com'), ('www.url12.com');")
+mycursor.execute("CREATE TABLE IF NOT EXISTS %s (id_url int NOT NULL AUTO_INCREMENT, URL VARCHAR(255), Scheme int, PRIMARY KEY (id_url))" % tbl_url)
+mycursor.execute("INSERT INTO URLs (URL, Scheme) VALUES ('www.url1.com', 0), ('www.url2.com', 0), ('www.url3.com', 0), ('www.url4.com', 0), ('www.url5.com', 0), ('www.url6.com', 0), ('www.url7.com', 0), ('www.url8.com', 0), ('www.url9.com', 0), ('www.url10.com', 0), ('www.url11.com', 0), ('www.url12.com', 0);")
 
 # fill Parameter table
-# mycursor.execute("CREATE TABLE IF NOT EXISTS %s (id_param int NOT NULL AUTO_INCREMENT, Parameter VARCHAR(255), URL_id int, PRIMARY KEY (id_param), FOREIGN KEY(URL_id) REFERENCES URLs(id_url))" % tbl_param)
-# mycursor.execute("INSERT INTO Parameters (Parameter, URL_id) VALUES ('name', 7), ('last_name', 7), ('age', 7), ('role', 7), ('sex', 7), ('birth_month', 4), ('birth_year', 4), ('valid', 2), ('page_number', 7), ('color', 8), ('password', 8), ('comment', 12), ('extra', 1);")
+mycursor.execute("CREATE TABLE IF NOT EXISTS %s (id_param int NOT NULL AUTO_INCREMENT, Parameter VARCHAR(255), Scheme int, URL_id int, PRIMARY KEY (id_param), FOREIGN KEY(URL_id) REFERENCES URLs(id_url))" % tbl_param)
+mycursor.execute("INSERT INTO Parameters (Parameter, Scheme, URL_id) VALUES ('name', 0, 7), ('last_name', 0, 7), ('age', 0, 7), ('role', 0, 7), ('sex', 0, 7), ('birth_month', 0, 4), ('birth_year', 0, 4), ('valid', 0, 2), ('page_number', 0, 7), ('color', 0, 8), ('password', 0, 8), ('comment', 0, 12), ('extra', 0, 1);")
 
 # fill Values table
 mycursor.execute("CREATE TABLE IF NOT EXISTS %s (id_val int NOT NULL AUTO_INCREMENT, Val VARCHAR(255), Format VARCHAR(255), Counter VARCHAR(255), Length VARCHAR(255), Param_id int, PRIMARY KEY (id_val), FOREIGN KEY(Param_id) REFERENCES Parameters(id_param))" % tbl_val)
@@ -84,11 +84,11 @@ mycursor.execute("INSERT INTO Val (Val, Format, Counter, Length, Param_id) VALUE
     ('Not so good.', '', '', '', 12), \
     ('With question?', '', '', '', 12), \
     ('Great!', '', '', '', 12), \
-    ('Extra12@”', '', '', '', 13), \
-    ('!@”#$%”', '', '', '', 13), \
+    ('Extra12@\"', '', '', '', 13), \
+    ('!@\"#$%\"', '', '', '', 13), \
     ('? ? @# %^ 8', '', '', '', 13), \
-    ('C#45v\45-\2', '', '', '', 13), \
-    ('k0v32.,\', '', '', '', 13), \
+    ('C#45v\\45-\\2', '', '', '', 13), \
+    ('k0v32.,', '', '', '', 13), \
     ('$', '', '', '', 13), \
     ('November', '', '', '', 6), \
     ('December', '', '', '', 6), \
@@ -127,15 +127,15 @@ mycursor.execute("INSERT INTO Val (Val, Format, Counter, Length, Param_id) VALUE
     ('W$ROp4.', '', '', '', 11), \
     ('pj4DL#lke', '', '', '', 11), \
     ('lknp34SK', '', '', '', 11), \
-    ('|@#$”|”>$', '', '', '', 13), \
+    ('|@#$\"|\">$', '', '', '', 13), \
     ('!#|#?$|@$}F#', '', '', '', 13), \
     ('2p3@#|$', '', '', '', 13), \
     ('1Z#@{z/\<', '', '', '', 13), \
-    ('P#”>”#{.z  “S', '', '', '', 13), \
-    ('#$}sp2SF$L@”', '', '', '', 13), \
+    ('P#\">\"#{.z  “S', '', '', '', 13), \
+    ('#$}sp2SF$L@\"', '', '', '', 13), \
     ('multiple word', '', '', '', 12), \
-    ('doesn’t have to be a sentence ', '', '', '', 12), \
-    ('I don’t believe', '', '', '', 12), \
+    ('doesnt have to be a sentence ', '', '', '', 12), \
+    ('I dont believe', '', '', '', 12), \
     ('Every. Word. Is a sentence.', '', '', '', 12), \
     ('Questioning is great?', '', '', '', 12);")
 # # convert values and add missing columns (that are set '')
