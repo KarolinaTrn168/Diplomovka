@@ -2,7 +2,7 @@ from audioop import add
 import json
 from SQLdb.connection_sql import connection_sql
 
-def create_scheme(URL, parameter):
+def create_scheme():
 	# create scheme file if not exist and fill with data
 	scheme = open('schema.json', 'a+')
 	# json.dump(my_json_string, file, indent=4)
@@ -38,11 +38,12 @@ def create_scheme(URL, parameter):
 			print(my_URLid)
 
 			# create new element for new URL
+			scheme = open('schema.json', 'a+')
 			newURL = {my_URL: {}}
 			# add new URL without Parameters into Scheme
 			data = read_json('schema.json')
 			data.update(newURL)
-			scheme.truncate(0)			#KED TO VIACKRAT PREJDE TU TO PADNE
+			scheme.truncate(0)
 			json.dump(data, scheme, indent=4)
 			scheme.close()
 
@@ -72,9 +73,55 @@ def create_scheme(URL, parameter):
 				mydb.commit()
 				i = i + 1
 
-
+	# check if all Parameters are in scheme	
+	mycursor.execute("SELECT Parameter FROM Parameters WHERE Scheme = 0 LIMIT 1")
+	row = mycursor.fetchone()
+	if row == None:
+		print("Every Parameter is in scheme.")
+	else:
+		# function that matches the parameters to the corresponding URL
+		add_parameters_only(mycursor, mydb)
+		
 def read_json(filename):
     with open(filename, 'r') as f:
         return json.load(f)
+	
+def add_parameters_only(mycursor, mydb):
+	check = 0
+	while check == 0:
+		mycursor.execute("SELECT Parameter FROM Parameters WHERE Scheme = 0 LIMIT 1")
+		row = mycursor.fetchone()
+		if row == None:
+			print("Every Parameter is in scheme.")
+			check = 1
+		else:
+			parameters = []
+			ids = []
+			URLs = []
+			# search for the parameter
+			mycursor.execute("SELECT Parameter FROM Parameters WHERE Scheme = 0 LIMIT 1")
+			for x in mycursor.fetchall():
+				parameters.extend(x)
+			my_parameter = parameters[0]
+			# get the corresponding URL_id and search for the URL
+			mycursor.execute("SELECT URL_id FROM Parameters WHERE Scheme = 0 AND Parameter = '%s' LIMIT 1" % (my_parameter))
+			for x in mycursor.fetchall():
+				ids.extend(x)
+			my_URL_id = ids[0]
+			mycursor.execute("SELECT URL FROM URLs WHERE id_url = '%s'" % (my_URL_id))
+			for x in mycursor.fetchall():
+				URLs.extend(x)
+			my_URL = URLs[0]
 
-create_scheme("www.URL123.com", "age")
+			# add new Parameter to corresponding URL into scheme
+			scheme = open('schema.json', 'a+')
+			data = read_json('schema.json')
+			data[my_URL][my_parameter] = []
+			scheme.truncate(0)
+			json.dump(data, scheme, indent=4)
+			scheme.close()
+			# Set value for Parameter: Scheme = 1
+			mycursor.execute("UPDATE Parameters SET Scheme = 1 WHERE Parameter = '%s' AND URL_id = '%s' LIMIT 1" % (my_parameter, my_URL_id))
+			mydb.commit()
+
+create_scheme()
