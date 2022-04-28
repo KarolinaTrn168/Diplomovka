@@ -1,4 +1,3 @@
-from itertools import count
 import json
 import string
 from SQLdb.connection_sql import connection_sql
