@@ -1,6 +1,11 @@
 import LearningMode.learning_mode as learning_mode
 import ExecutingMode.executing_mode as execution_mode
 
+# from SQLdb import fill_db
+# from LearningMode.convert_params import convert_values
+from LearningMode.prepare_perform_NN import perform_NN
+# from create_schema import create_scheme
+
 # Menu - choose mode
 print("You now have three options you are able to preceed with.\nType the corresponding number you want to be performed.\nLEARNING MODE - 1\nVALIDATION MODE - 2\nWITHOUT ANY MODE - 3")
 # Mabybe option Help - explaining the main idea of the modes
@@ -13,7 +18,13 @@ while choice != "exit":
     if choice == "1":
         print("Learning mode will be executed.")
         # Beginning with crawling
-        learning_mode.crawling()
+        # learning_mode.crawling()
+
+        # Fill DB, Convert values, create scheme, prepare for NN
+        # fill_db()
+        perform_NN()
+        
+
         break
     # Execution Mode:
     elif choice == "2":

@@ -154,5 +154,5 @@ def add_format(URL, Param, Value):
 	# mydb.commit()	
 
 
-create_scheme()
+# create_scheme()
 # add_format('www.url8.com', 'color', '12345')
