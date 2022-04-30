@@ -124,4 +124,35 @@ def add_parameters_only(mycursor, mydb):
 			mycursor.execute("UPDATE Parameters SET Scheme = 1 WHERE Parameter = '%s' AND URL_id = '%s' LIMIT 1" % (my_parameter, my_URL_id))
 			mydb.commit()
 
+def add_format(URL, Param, Value):
+	# access to the database
+	with open('/home/karo/Desktop/Diplomka/Diplomovka/configurations.json', encoding='utf8') as config_file:
+		Config = json.load(config_file)
+	mydb, mycursor = connection_sql()
+	db = Config['sql']['db_sql']
+	# URLs = []
+	# Params = []
+	# mycursor.execute("SELECT id_url FROM URLs WHERE URL = '%s' LIMIT 1" % (URL))
+	# for x in mycursor.fetchall():
+	# 	URLs.extend(x)      # list of all values		
+	# my_URL = URLs[0]
+
+	# mycursor.execute("SELECT id_param FROM Parameters WHERE Parameter = '%s' AND URL_id = '%s' LIMIT 1" % (Param, my_URL))
+	# for x in mycursor.fetchall():
+	# 	Params.extend(x)      # list of all values		
+	# my_Param = Params[0]
+
+	# add new Parameter to corresponding URL into scheme
+	scheme = open('schema.json', 'a+')
+	data = read_json('schema.json')
+	data[URL][Param].append(str(Value))
+	scheme.truncate(0)
+	json.dump(data, scheme, indent=4)				# CHECK IF WORKS!!!
+	scheme.close()
+	# # Set value for Parameter: Scheme = 1
+	# mycursor.execute("UPDATE Val SET Scheme = 1 WHERE Param_id = '%s'" % (my_Param))
+	# mydb.commit()	
+
+
 create_scheme()
+# add_format('www.url8.com', 'color', '12345')
