@@ -1,7 +1,5 @@
 import csv
 import json
-import string
-import pandas as pd
 from SQLdb.connection_sql import connection_sql
 from LearningMode.neuron_MLPClassifier import train_predict
 from create_schema import add_format, create_scheme
@@ -11,7 +9,7 @@ from LearningMode.convert_params import convert_values
 
 def perform_NN():
     convert_values()
-    create_scheme()
+    create_scheme('schema_NN.json')
 
     with open('/home/karo/Desktop/Diplomka/Diplomovka/configurations.json', encoding='utf8') as config_file:
         Config = json.load(config_file)
@@ -107,7 +105,7 @@ def perform_NN():
             URLs.extend(x)      # list of all values		
         scheme_URL = URLs[0]
 
-        add_format(scheme_URL, scheme_Param, scheme_Value)
+        add_format('schema_NN.json', scheme_URL, scheme_Param, scheme_Value)
 
         i = i + 1
 

@@ -1,9 +1,9 @@
 import json
 from SQLdb.connection_sql import connection_sql
 
-def create_scheme():
+def create_scheme(schema_type):
 	# create scheme file if not exist and fill with data
-	scheme = open('schema.json', 'a+')
+	scheme = open(schema_type, 'a+')
 	# json.dump(my_json_string, file, indent=4)
 
 	# access to the database
@@ -37,10 +37,10 @@ def create_scheme():
 			print(my_URLid)
 
 			# create new element for new URL
-			scheme = open('schema.json', 'a+')
+			scheme = open(schema_type, 'a+')
 			newURL = {my_URL: {}}
 			# add new URL without Parameters into Scheme
-			data = read_json('schema.json')
+			data = read_json(schema_type)
 			data.update(newURL)
 			scheme.truncate(0)
 			json.dump(data, scheme, indent=4)
@@ -61,8 +61,8 @@ def create_scheme():
 				print(x)
 				my_parameter = parameters[i]
 				# add new Parameter to corresponding URL into scheme
-				scheme = open('schema.json', 'a+')
-				data = read_json('schema.json')
+				scheme = open(schema_type, 'a+')
+				data = read_json(schema_type)
 				data[my_URL][my_parameter] = []
 				scheme.truncate(0)
 				json.dump(data, scheme, indent=4)
@@ -79,13 +79,13 @@ def create_scheme():
 		print("Every Parameter is in scheme.")
 	else:
 		# function that matches the parameters to the corresponding URL
-		add_parameters_only(mycursor, mydb)
+		add_parameters_only(schema_type, mycursor, mydb)
 		
 def read_json(filename):
     with open(filename, 'r') as f:
         return json.load(f)
 	
-def add_parameters_only(mycursor, mydb):
+def add_parameters_only(schema_type, mycursor, mydb):
 	check = 0
 	while check == 0:
 		mycursor.execute("SELECT Parameter FROM Parameters WHERE Scheme = 0 LIMIT 1")
@@ -113,8 +113,8 @@ def add_parameters_only(mycursor, mydb):
 			my_URL = URLs[0]
 
 			# add new Parameter to corresponding URL into scheme
-			scheme = open('schema.json', 'a+')
-			data = read_json('schema.json')
+			scheme = open(schema_type, 'a+')
+			data = read_json(schema_type)
 			data[my_URL][my_parameter] = []
 			scheme.truncate(0)
 			json.dump(data, scheme, indent=4)
@@ -123,7 +123,7 @@ def add_parameters_only(mycursor, mydb):
 			mycursor.execute("UPDATE Parameters SET Scheme = 1 WHERE Parameter = '%s' AND URL_id = '%s' LIMIT 1" % (my_parameter, my_URL_id))
 			mydb.commit()
 
-def add_format(URL, Param, Value):
+def add_format(schema_type, URL, Param, Value):
 	# access to the database
 	with open('/home/karo/Desktop/Diplomka/Diplomovka/configurations.json', encoding='utf8') as config_file:
 		Config = json.load(config_file)
@@ -142,8 +142,8 @@ def add_format(URL, Param, Value):
 	# my_Param = Params[0]
 
 	# add new Parameter to corresponding URL into scheme
-	scheme = open('schema.json', 'a+')
-	data = read_json('schema.json')
+	scheme = open(schema_type, 'a+')
+	data = read_json(schema_type)
 	data[URL][Param].append(str(Value))
 	scheme.truncate(0)
 	json.dump(data, scheme, indent=4)				# CHECK IF WORKS!!!

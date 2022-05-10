@@ -136,5 +136,3 @@ def convert_values():
         mycursor.execute("UPDATE Val SET Format = '%s', Counter = '%s', Length = '%s' WHERE Val = '%s' AND Format = '' LIMIT 1" % (format, counter, len(actual_value), actual_value))
         mydb.commit()
         i = i+1
-
-convert_values()
