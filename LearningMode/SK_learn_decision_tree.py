@@ -32,5 +32,3 @@ def decision_tree(Predict_file):
     print(predictions)
     print("-----------------------------------------------")
     return predictions
-
-decision_tree('/home/karo/Desktop/Diplomka/Diplomovka/data_predict.csv')

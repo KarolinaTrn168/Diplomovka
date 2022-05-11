@@ -2,14 +2,15 @@ import csv
 import json
 from SQLdb.connection_sql import connection_sql
 from LearningMode.neuron_MLPClassifier import train_predict
+from LearningMode.SK_learn_decision_tree import decision_tree
 from create_schema import add_format, create_scheme
 from LearningMode.convert_params import convert_values
 
 
 
-def perform_NN():
+def perform_NN_DT(scheme_type):
     convert_values()
-    create_scheme('schema_NN.json')
+    create_scheme(scheme_type)
 
     with open('/home/karo/Desktop/Diplomka/Diplomovka/configurations.json', encoding='utf8') as config_file:
         Config = json.load(config_file)
@@ -31,15 +32,41 @@ def perform_NN():
             
     mycursor = mydb.cursor(buffered=True)
     while check == 1:
-        mycursor.execute("SELECT Param_id FROM Val WHERE Scheme = 0")
-        row = mycursor.fetchone()
+        if scheme_type == 'schema_NN.json':
+            mycursor.execute("SELECT Param_id FROM Val WHERE Scheme = 00")
+            row = mycursor.fetchone()
+            if row == None:
+                mycursor.execute("SELECT Param_id FROM Val WHERE Scheme = 01")
+                row = mycursor.fetchone()
+                values_schema = 1
+            else:
+                values_schema = 2
+        else:
+            mycursor.execute("SELECT Param_id FROM Val WHERE Scheme = 00")
+            row = mycursor.fetchone()
+            if row == None:
+                mycursor.execute("SELECT Param_id FROM Val WHERE Scheme = 10")
+                row = mycursor.fetchone()
+                values_schema = 1
+            else:
+                values_schema = 2
+
         if row == None:
             print("Every Parameter is in scheme.")
             check = 0
         else:
             Values = []
             Param_id = []
-            mycursor.execute("SELECT Param_id FROM Val WHERE Scheme = 0 LIMIT 1")
+            if scheme_type == 'schema_NN.json':
+                if values_schema == 1:
+                    mycursor.execute("SELECT Param_id FROM Val WHERE Scheme = 01 LIMIT 1")
+                else:
+                    mycursor.execute("SELECT Param_id FROM Val WHERE Scheme = 00 LIMIT 1")
+            else:
+                if values_schema == 1:
+                    mycursor.execute("SELECT Param_id FROM Val WHERE Scheme = 10 LIMIT 1")
+                else:
+                    mycursor.execute("SELECT Param_id FROM Val WHERE Scheme = 00 LIMIT 1")
             for x in mycursor.fetchall():
                 Param_id.extend(x)      # list of all values	
             my_param_id = Param_id[0]
@@ -70,13 +97,32 @@ def perform_NN():
             writer.writerow(data)
 
             # Set value for Parameter: Scheme = 1
-            mycursor.execute("UPDATE Val SET Scheme = 1 WHERE Param_id = '%s'" % (my_param_id))
-            mydb.commit()	
+            if scheme_type == 'schema_NN.json':
+                if values_schema == 1:
+                    mycursor.execute("UPDATE Val SET Scheme = 11 WHERE Param_id = '%s'" % (my_param_id))
+                    mydb.commit()	
+                else:
+                    mycursor.execute("UPDATE Val SET Scheme = 10 WHERE Param_id = '%s'" % (my_param_id))
+                    mydb.commit()
+            else:
+                if values_schema == 1:
+                    mycursor.execute("UPDATE Val SET Scheme = 11 WHERE Param_id = '%s'" % (my_param_id))
+                    mydb.commit()	
+                else:
+                    mycursor.execute("UPDATE Val SET Scheme = 01 WHERE Param_id = '%s'" % (my_param_id))
+                    mydb.commit()
 
     csv_file.close()
     # Get the predictions
-    Predictions = train_predict('/home/karo/Desktop/Diplomka/Diplomovka/data_predict.csv')
-    print(Predictions)
+    Predictions = []
+    if scheme_type == 'schema_NN.json':
+        Predictions = train_predict('/home/karo/Desktop/Diplomka/Diplomovka/data_predict.csv')
+        print(Predictions)
+    elif scheme_type == 'schema_DT.json':
+        Predictions = decision_tree('/home/karo/Desktop/Diplomka/Diplomovka/data_predict.csv')
+        print(Predictions)
+    else:
+        print("No valid scheme. Error...")
 
     # Write it into scheme on correct place 
     i = 0
@@ -105,7 +151,7 @@ def perform_NN():
             URLs.extend(x)      # list of all values		
         scheme_URL = URLs[0]
 
-        add_format('schema_NN.json', scheme_URL, scheme_Param, scheme_Value)
+        add_format(scheme_type, scheme_URL, scheme_Param, scheme_Value)
 
         i = i + 1
 
