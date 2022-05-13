@@ -30,7 +30,7 @@ WITHOUT ANY MODE - 3")
             LM_DT = learning_mode.check_scheme_DT(URL)
             if LM_NN == True & LM_DT == True:
                 print("The Learning mode was performed for both methods (Neural Network and Decision Tree).\n\
-                You may continue with the Execution mode.")
+You may continue with the Execution mode.")
                 break
             algo = learning_mode.select_algorithm()
             if algo == 1:
@@ -41,8 +41,8 @@ WITHOUT ANY MODE - 3")
                     perform_NN_DT('schema_NN.json')
                 if LM_NN == True & LM_DT == False:
                     print("The Learning mode was performed for the Neural Network already.\n\
-                    If you wish to perform the Decision Tree, press 1.\n\
-                    If not, and you wish to go back to the main menu, press anything else.")
+If you wish to perform the Decision Tree, press 1.\n\
+If not, and you wish to go back to the main menu, press anything else.")
                     other = input()
                     if other == 1:
                         print("Decision Tree will be executed.")
@@ -58,8 +58,8 @@ WITHOUT ANY MODE - 3")
                     perform_NN_DT('schema_DT.json')
                 if LM_NN == False & LM_DT == True:
                     print("The Learning mode was performed for the Decision Tree already.\n\
-                    If you wish to perform the Neural Network, press 1.\n\
-                    If not, and you wish to go back to the main menu, press anything else.")
+If you wish to perform the Neural Network, press 1.\n\
+If not, and you wish to go back to the main menu, press anything else.")
                     other = input()
                     if other == 1:
                         print("Neural Network will be executed.")

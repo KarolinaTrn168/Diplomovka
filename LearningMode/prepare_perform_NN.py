@@ -1,5 +1,7 @@
 import csv
+from enum import unique
 import json
+import numpy as np
 from SQLdb.connection_sql import connection_sql
 from LearningMode.neuron_MLPClassifier import train_predict
 from LearningMode.SK_learn_decision_tree import decision_tree
@@ -21,7 +23,9 @@ def perform_NN_DT(scheme_type):
     head = ['Result', '1', '2', '3', '4', '5']
     check = 1
     Order = []
-
+    Counters = []
+    Lenths = []
+    k = 0
     # csv_file = open('data_predict.csv', 'w', encoding='UTF8', newline='')
     # writer = csv.writer(csv_file)
     # writer.writerow(head)
@@ -33,19 +37,19 @@ def perform_NN_DT(scheme_type):
     mycursor = mydb.cursor(buffered=True)
     while check == 1:
         if scheme_type == 'schema_NN.json':
-            mycursor.execute("SELECT Param_id FROM Val WHERE Scheme = 00")
+            mycursor.execute("SELECT Param_id FROM Val WHERE Scheme = 11")
             row = mycursor.fetchone()
             if row == None:
-                mycursor.execute("SELECT Param_id FROM Val WHERE Scheme = 01")
+                mycursor.execute("SELECT Param_id FROM Val WHERE Scheme = 12")
                 row = mycursor.fetchone()
                 values_schema = 1
             else:
                 values_schema = 2
         else:
-            mycursor.execute("SELECT Param_id FROM Val WHERE Scheme = 00")
+            mycursor.execute("SELECT Param_id FROM Val WHERE Scheme = 11")
             row = mycursor.fetchone()
             if row == None:
-                mycursor.execute("SELECT Param_id FROM Val WHERE Scheme = 10")
+                mycursor.execute("SELECT Param_id FROM Val WHERE Scheme = 21")
                 row = mycursor.fetchone()
                 values_schema = 1
             else:
@@ -59,14 +63,14 @@ def perform_NN_DT(scheme_type):
             Param_id = []
             if scheme_type == 'schema_NN.json':
                 if values_schema == 1:
-                    mycursor.execute("SELECT Param_id FROM Val WHERE Scheme = 01 LIMIT 1")
+                    mycursor.execute("SELECT Param_id FROM Val WHERE Scheme = 12 LIMIT 1")
                 else:
-                    mycursor.execute("SELECT Param_id FROM Val WHERE Scheme = 00 LIMIT 1")
+                    mycursor.execute("SELECT Param_id FROM Val WHERE Scheme = 11 LIMIT 1")
             else:
                 if values_schema == 1:
-                    mycursor.execute("SELECT Param_id FROM Val WHERE Scheme = 10 LIMIT 1")
+                    mycursor.execute("SELECT Param_id FROM Val WHERE Scheme = 21 LIMIT 1")
                 else:
-                    mycursor.execute("SELECT Param_id FROM Val WHERE Scheme = 00 LIMIT 1")
+                    mycursor.execute("SELECT Param_id FROM Val WHERE Scheme = 11 LIMIT 1")
             for x in mycursor.fetchall():
                 Param_id.extend(x)      # list of all values	
             my_param_id = Param_id[0]
@@ -93,23 +97,127 @@ def perform_NN_DT(scheme_type):
             print(occ5)
 
             data = [0, occ1, occ2, occ3, occ4, occ5]
-
             writer.writerow(data)
+
+# Prepare Length value for scheme entry
+            Values2 = []
+            mycursor.execute("SELECT Length FROM Val WHERE Param_id = '%s'" % (my_param_id))
+            for x in mycursor.fetchall():
+                Values2.extend(x)      # list of all values	
+            print(Values2)
+            min_len = min(Values2)
+            max_len = max(Values2)
+            str_len = "-".join((str(min_len), str(max_len)))
+            Lenths.append(str_len)
+
+# Prepare Counter vaue for scheme entry
+            Values1 = []
+            mycursor.execute("SELECT Counter FROM Val WHERE Param_id = '%s'" % (my_param_id))
+            for x in mycursor.fetchall():
+                Values1.extend(x)      # list of all values	
+            print(Values1)
+            j = 0
+            while j < 7:
+                print("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$")
+                tmp = []
+                for x in Values1:
+                    val = x.split(';', j+1)[j]
+                    tmp.append(val)
+                if j == 0:
+                    print("c1")
+                    if min(tmp) == max(tmp):
+                        c1 = max(tmp)
+                    else:
+                        c1 = "-".join((str(min(tmp)), str(max(tmp))))
+                    print(c1)
+                elif j == 1:
+                    print("c2")
+                    if min(tmp) == max(tmp):
+                        c2 = max(tmp)
+                    else:
+                        c2 = "-".join((str(min(tmp)), str(max(tmp))))
+                    print(c2)
+                elif j == 2:
+                    print("c3")
+                    if min(tmp) == max(tmp):
+                        c3 = max(tmp)
+                    else:
+                        c3 = "-".join((str(min(tmp)), str(max(tmp))))
+                    print(c3)
+                elif j == 3:
+                    print("c4")
+                    if min(tmp) == max(tmp):
+                        c4 = max(tmp)
+                    else:
+                        c4 = "-".join((str(min(tmp)), str(max(tmp))))
+                    print(c4)
+                elif j == 4:
+                    print("c5")
+                    tmp1 = []
+                    for h in tmp:
+                        tmp1.extend(h.split(','))
+                    print(tmp1)
+                    tmp2 = np.unique(tmp1)
+                    if len(tmp2) > 5:
+                        c5 = 'any'
+                    else:
+                        c5 = ",".join([str(item) for item in tmp2])
+                    print(c5)
+                elif j == 5:
+                    print("c6")
+                    tmp1 = []
+                    for h in tmp:
+                        tmp1.extend(h.split(','))
+                    print(tmp1)
+                    tmp2 = np.unique(tmp1)
+                    if len(tmp2) > 5:
+                        c6 = 'any'
+                    else:
+                        c6 = ",".join([str(item) for item in tmp2])
+                    print(c6)
+                else:
+                    print("c7")
+                    m = 0 
+                    last_position = 0
+                    for n in tmp:
+                        if n == Values[m]:
+                            print("last position")
+                        else:
+                            last_position = 1
+                        m = m+1
+                    if last_position == 0:
+                        c7 = 'last'
+                    else:
+                        tmp1 = []
+                        for h in tmp:
+                            tmp1.extend(h.split(','))
+                        print(tmp1)
+                        tmp2 = np.unique(tmp1)
+                        if len(tmp2) > 5:
+                            c7 = 'any'
+                        else:
+                            c7 = ",".join([str(item) for item in tmp2])
+                    print(c7)
+                print("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$")
+                j = j + 1
+
+            str_count = ";".join((str(c1), str(c2), str(c3), str(c4), str(c5), str(c6), str(c7)))
+            Counters.append(str_count)
 
             # Set value for Parameter: Scheme = 1
             if scheme_type == 'schema_NN.json':
                 if values_schema == 1:
-                    mycursor.execute("UPDATE Val SET Scheme = 11 WHERE Param_id = '%s'" % (my_param_id))
+                    mycursor.execute("UPDATE Val SET Scheme = 22 WHERE Param_id = '%s'" % (my_param_id))
                     mydb.commit()	
                 else:
-                    mycursor.execute("UPDATE Val SET Scheme = 10 WHERE Param_id = '%s'" % (my_param_id))
+                    mycursor.execute("UPDATE Val SET Scheme = 21 WHERE Param_id = '%s'" % (my_param_id))
                     mydb.commit()
             else:
                 if values_schema == 1:
-                    mycursor.execute("UPDATE Val SET Scheme = 11 WHERE Param_id = '%s'" % (my_param_id))
+                    mycursor.execute("UPDATE Val SET Scheme = 22 WHERE Param_id = '%s'" % (my_param_id))
                     mydb.commit()	
                 else:
-                    mycursor.execute("UPDATE Val SET Scheme = 01 WHERE Param_id = '%s'" % (my_param_id))
+                    mycursor.execute("UPDATE Val SET Scheme = 12 WHERE Param_id = '%s'" % (my_param_id))
                     mydb.commit()
 
     csv_file.close()
@@ -129,6 +237,8 @@ def perform_NN_DT(scheme_type):
     while i < len(Order):
         # Values that were predicted
         scheme_Value = Predictions[i]
+        scheme_Counter = Counters[i]
+        scheme_Len = Lenths[i]
 
         # Parameter ids are in Order[]
         Params = []
@@ -151,7 +261,7 @@ def perform_NN_DT(scheme_type):
             URLs.extend(x)      # list of all values		
         scheme_URL = URLs[0]
 
-        add_format(scheme_type, scheme_URL, scheme_Param, scheme_Value)
+        add_format(scheme_type, scheme_URL, scheme_Param, scheme_Value, scheme_Counter, scheme_Len)
 
         i = i + 1
 
@@ -160,59 +270,3 @@ def perform_NN_DT(scheme_type):
     # writer = csv.writer(csv_file)
     # writer.writerow(head)
     # csv_file.close()
-
-
-
-
-
-
-# value1 = ['12045', '12345', '10345', '02305', '12345', '12045', '12305', \
-#     '10305', '12045', '02345', '12040', '10045', '12300', '12305', '00345', \
-#     '12005', '12345', '12045', '12345', '00305', '12300', '02340', '12040', \
-#     '12005', '12305', '02340', '10305', '02040', '00045', '12340', '00340', \
-#     '12345', '10345', '12045', '12305', '12340', '02345', '12005', '10305', \
-#     '12300', '12300', '02045', '12345', '02340', '12000', '12045', '12345', \
-#     '00305', '12300', '02340', '12040', '12005', '12305', '02340', '10305', \
-#     '02040', '00045', '12340', '00340', '12345', '12045', '12305', '12340', \
-#     '12005', '10305', '02340', '10305', '12045', '12305', '12300', '12305', \
-#     '02045', '10005', '12045', '00340', '12345', '12040', '12005', '10305', \
-#     '12300', '10305', '02040', '12345', '00305', '12045', '12345', '10345', \
-#     '02305', '12345', '12045', '12305', '12345', '00305', '12300', '02340', \
-#     '12040', '12005', '02340', '12040', '12005', '12305', '02340', '10305', \
-#     '12045', '12305', '12340', '12305', '02340', '10305', '12340', '12005', \
-#     '12305']
-
-# value2 = ['12300', '12000', '02300', '12300', '12300', '12000', '10300', \
-#     '12000', '12300', '12000', '12300', '10000', '02000', '02300', '12300', \
-#     '12000', '02300', '10300', '12300', '12000', '10300', '12000', '12300', \
-#     '12000', '12300', '10300', '02000', '02300', '12300']
-
-# str_value1 = "".join([str(item) for item in value1])
-# print(str_value1)
-# len_value1 = len(value1)
-# print(len_value1)
-# occ1 = str_value1.count('1')/len_value1
-# print(occ1)
-# occ2 = str_value1.count('2')/len_value1
-# print(occ2)
-# occ3 = str_value1.count('3')/len_value1
-# print(occ3)
-# occ4 = str_value1.count('4')/len_value1
-# print(occ4)
-# occ5 = str_value1.count('5')/len_value1
-# print(occ5)
-
-# str_value2 = "".join([str(item) for item in value2])
-# print(str_value2)
-# len_value2 = len(value2)
-# print(len_value2)
-# occ1 = str_value2.count('1')/len_value2
-# print(occ1)
-# occ2 = str_value2.count('2')/len_value2
-# print(occ2)
-# occ3 = str_value2.count('3')/len_value2
-# print(occ3)
-# occ4 = str_value2.count('4')/len_value2
-# print(occ4)
-# occ5 = str_value2.count('5')/len_value2
-# print(occ5)

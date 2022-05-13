@@ -121,17 +121,15 @@ def add_parameters_only(schema_type, mycursor, mydb):
 			mycursor.execute("UPDATE Parameters SET Scheme = 1 WHERE Parameter = '%s' AND URL_id = '%s' LIMIT 1" % (my_parameter, my_URL_id))
 			mydb.commit()
 
-def add_format(schema_type, URL, Param, Value):
+def add_format(schema_type, URL, Param, Value, Counter, Length):
 # access to the database
 	with open('/home/karo/Desktop/Diplomka/Diplomovka/configurations.json', encoding='utf8') as config_file:
 		Config = json.load(config_file)
-	mydb, mycursor = connection_sql()
-	db = Config['sql']['db_sql']
 
 # add new Parameter to corresponding URL into scheme
 	scheme = open(schema_type, 'a+')
 	data = read_json(schema_type)
-	data[URL][Param].append(str(Value))
+	data[URL][Param].append((str(Value), str(Counter), str(Length)))
 	scheme.truncate(0)
 	json.dump(data, scheme, indent=4)
 	scheme.close()
