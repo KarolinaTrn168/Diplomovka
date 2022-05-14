@@ -7,6 +7,7 @@ from LearningMode.neuron_MLPClassifier import train_predict
 from LearningMode.SK_learn_decision_tree import decision_tree
 from create_schema import add_format, create_scheme
 from LearningMode.convert_params import convert_values
+import string
 
 
 
@@ -224,10 +225,10 @@ def perform_NN_DT(scheme_type):
     # Get the predictions
     Predictions = []
     if scheme_type == 'schema_NN.json':
-        Predictions = train_predict('/home/karo/Desktop/Diplomka/Diplomovka/data_predict.csv')
+        Predictions = train_predict('/home/karo/Desktop/Diplomka/Diplomovka/data_predict.csv').toarray()
         print(Predictions)
     elif scheme_type == 'schema_DT.json':
-        Predictions = decision_tree('/home/karo/Desktop/Diplomka/Diplomovka/data_predict.csv')
+        Predictions = decision_tree('/home/karo/Desktop/Diplomka/Diplomovka/data_predict.csv').tolist()
         print(Predictions)
     else:
         print("No valid scheme. Error...")
@@ -236,7 +237,12 @@ def perform_NN_DT(scheme_type):
     i = 0
     while i < len(Order):
         # Values that were predicted
-        scheme_Value = Predictions[i]
+        scheme_Value = str(Predictions[i])
+
+        print(scheme_Value)
+        print(type(scheme_Value))
+        while len(str(scheme_Value)) < 5:
+            scheme_Value = '0' + str(scheme_Value)
         scheme_Counter = Counters[i]
         scheme_Len = Lenths[i]
 

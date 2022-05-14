@@ -2,7 +2,7 @@ from asyncore import read
 from optparse import Values
 import re
 import json
-from compare_to_scheme import compare_scheme
+from ExecutingMode.compare_to_scheme import compare_scheme
 
 def read_json(filename):
     with open(filename, 'r') as f:
@@ -57,4 +57,4 @@ def check_parameter(scheme_type, URL):
         j = j+1
 
 
-check_url_scheme('www.url7.com/login?name=Aladin&age=232&role=Admin', 'schema_DT.json')
+# check_url_scheme('www.url7.com/login?name=Aladin&age=232&role=Admin', 'schema_DT.json')

@@ -79,9 +79,9 @@ If you want to use the Neural Network, press 1.\n\
 If you want to use the Decision Tree, press 2.")
             validation = input()
             if validation == 1:
-                scheme_type == 'schema_NN.json'
+                scheme_type = 'schema_NN.json'
             else:
-                scheme_type == 'schema_DT.json'
+                scheme_type = 'schema_DT.json'
             check_url_scheme(URL, scheme_type)
             break
 # None:
