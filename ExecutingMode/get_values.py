@@ -2,7 +2,9 @@ from asyncore import read
 from optparse import Values
 import re
 import json
+import webbrowser
 from ExecutingMode.compare_to_scheme import compare_scheme
+import webbrowser
 
 def read_json(filename):
     with open(filename, 'r') as f:
@@ -52,9 +54,38 @@ def check_parameter(scheme_type, URL):
     print(values)
 
     j = 0
+    check_for_send = []
     for x in parameters:
-        compare_scheme(scheme_type, url, x, values[j])
+        sending = compare_scheme(scheme_type, url, x, values[j])
+        check_for_send.extend(sending)
         j = j+1
-
+    
+    print("RECOMMENDATION")
+    check_for_send.sort()
+    if check_for_send[0] == check_for_send[-1]:
+        if check_for_send[0] == 1:
+            print("There should be no doubt. The request will be forwarded to the server.")
+        elif check_for_send[0] == 2:
+            print("The request does not seems secure. The request will not be forwarded to the server.")
+        else:
+            print("The request does not to be malicious. It is still recommended to chceck the request again. \nIf you are sure you want to send the request, press 1. \n If you do not want to send the request, press 2.")
+            sending = input()
+            if sending == 1:
+                print("Request will be sent.")
+                webbrowser.open(URL)
+            elif sending == 2:
+                print("Request will be not sent.")
+            else: 
+                print("Not valid input.")
+    else:
+        print("The request does not to be malicious. It is still recommended to chceck the request again. \nIf you are sure you want to send the request, press 1. \n If you do not want to send the request, press 2.")
+        sending = input()
+        if sending == 1:
+            print("Request will be sent.")
+            webbrowser.open(URL)
+        elif sending == 2:
+            print("Request will be not sent.")
+        else: 
+            print("Not valid input.")
 
 # check_url_scheme('www.url7.com/login?name=Aladin&age=232&role=Admin', 'schema_DT.json')

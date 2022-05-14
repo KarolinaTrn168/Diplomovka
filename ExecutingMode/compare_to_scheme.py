@@ -99,8 +99,8 @@ def compare_scheme(scheme_type, URL, Param, Value):
 # compare actual with scheme
 # format
     if format == s_format:
-        print("Format is the same.")
         format_check = 1
+        print("The format is completely the same as the prescription in the validation scheme.")
     else:
         pos = 0
         for x in format:
@@ -108,15 +108,19 @@ def compare_scheme(scheme_type, URL, Param, Value):
                 print('equal')
             elif x == '0':
                 format_check = 2
+                print("The format does not contain every character type, as written in the validation scheme. This do not has to be an attack, but reviewing the request is recommended.")
             else:
                 format_check = 3
+                print("The format does not correspond with the validation scheme. Please chceck the request for bad values.")
                 break
             pos = pos + 1
 
 # counter
     if counter == s_counter:
         counter_check = 1
+        print("The counter is completely the same as the prescription in the validation scheme.")
     else:
+        print("The counter does not correspond in every character amount and placement, as written in the validation scheme. This do not has to be an attack, but reviewing the request is recommended.")
         splited_counter = counter.split(';')
         splited_counter_s = s_counter.split(';')
 # amount of numbers
@@ -261,13 +265,23 @@ def compare_scheme(scheme_type, URL, Param, Value):
         s_min = int(s_length.split('-')[0])
         s_max = int(s_length.split('-')[1])
         if (length > s_min - 1) and (length < s_max + 1):
+            "The length is within the intervall according to the prescription in the validation scheme ."
             length_check = 1
         else:
-            print("Length out of range.")
+            print("The length is out of range. This do not has to be an attack, but reviewing the request is recommended.")
             length_check = 2
     else:
         if length == s_length:
+            "The format is completely the same as the prescription in the validation scheme."
             length_check = 1
         else:
+            print("The length is out of range. This do not has to be an attack, but reviewing the request is recommended.")
             length_check = 2
 # evaluate 
+    print("RECOMMENDATION")
+    if (format_check == 1) and (counter_check == 1) and (length_check == 1):
+        return 1
+    elif (format_check == 3):
+        return 2
+    else:
+        return 3
