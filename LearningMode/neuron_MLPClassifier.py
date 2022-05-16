@@ -1,8 +1,6 @@
 import pandas as pd
 from sklearn.neural_network import MLPClassifier
-
-# data = pd.read_csv('/home/karo/Desktop/Diplomka/Diplomovka/LearningMode/data.csv')
-# print(data)
+import json
 
 # train, test = train_test_split(data, random_state=42)
 # X_train = train[train.columns[2:6]]
@@ -11,9 +9,15 @@ from sklearn.neural_network import MLPClassifier
 # Y_test = test['Result']
 
 def train_predict(Predict_file):
-    data_train = pd.read_csv('/home/karo/Desktop/Diplomka/Diplomovka/LearningMode/data_train.csv')
+    with open('/home/karo/Desktop/Diplomka/Diplomovka/configurations.json', encoding='utf8') as config_file:
+        Config = json.load(config_file)
+    try:
+        train_csv = Config['paths']['train_csv']
+    except Exception as ex:
+        print('Error', ex)
+        exit('Failed.')
+    data_train = pd.read_csv(train_csv)
     print(data_train)
-    # data_predict = pd.read_csv('/home/karo/Desktop/Diplomka/Diplomovka/LearningMode/data_predict.csv')
     data_predict = pd.read_csv(Predict_file)
     print(data_predict)
 

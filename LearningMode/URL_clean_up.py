@@ -26,14 +26,6 @@ for x in work_endpoints:
     if question_mark:
         print(x)
         print(question_mark)
-        # if question_mark not in scheme_json:
-            # print("question mark: ", question_mark[0])
-            # print("scheme: ",  scheme_json)
-            # entry = {question_mark[0] : None}
-            # data = json.load(scheme_json)
-            # data.append(entry)
-            # scheme_json.seek(0)
-            # json.dump(data, scheme_json)
         with open("schema.json", encoding='utf8') as file:
             if question_mark[0] not in file:
                 entry = question_mark[0]

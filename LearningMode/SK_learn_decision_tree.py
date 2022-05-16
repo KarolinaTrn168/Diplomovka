@@ -1,12 +1,14 @@
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.model_selection import train_test_split
 import pandas as pd
+import json
 
 
 def decision_tree(Predict_file):
-    data_train = pd.read_csv('/home/karo/Desktop/Diplomka/Diplomovka/LearningMode/data_train.csv')
-    print(data_train)
-    # data_predict = pd.read_csv('/home/karo/Desktop/Diplomka/Diplomovka/LearningMode/data_predict.csv')
+    with open('/home/karo/Desktop/Diplomka/Diplomovka/configurations.json', encoding='utf8') as config_file:
+        Config = json.load(config_file)
+        train_csv = Config['paths']['train_csv']
+    data_train = pd.read_csv(train_csv)
     data_predict = pd.read_csv(Predict_file)
     print(data_predict)
 

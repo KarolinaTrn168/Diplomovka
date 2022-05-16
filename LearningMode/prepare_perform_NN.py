@@ -20,6 +20,7 @@ def perform_NN_DT(scheme_type):
 
         mydb, mycursor = connection_sql()
         db = Config['sql']['db_sql']
+        predict_csv = Config['paths']['predict_csv']
 
     head = ['Result', '1', '2', '3', '4', '5']
     check = 1
@@ -225,10 +226,10 @@ def perform_NN_DT(scheme_type):
     # Get the predictions
     Predictions = []
     if scheme_type == 'schema_NN.json':
-        Predictions = train_predict('/home/karo/Desktop/Diplomka/Diplomovka/data_predict.csv').toarray()
+        Predictions = train_predict(predict_csv).tolist()
         print(Predictions)
     elif scheme_type == 'schema_DT.json':
-        Predictions = decision_tree('/home/karo/Desktop/Diplomka/Diplomovka/data_predict.csv').tolist()
+        Predictions = decision_tree(predict_csv).tolist()
         print(Predictions)
     else:
         print("No valid scheme. Error...")

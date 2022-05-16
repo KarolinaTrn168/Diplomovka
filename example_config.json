@@ -9,5 +9,9 @@
         "host_sql": "hostname",
         "user_sql": "username",
         "password_sql": "password"
+    },
+    "paths": {
+        "train_csv": "path/to/data_train.csv",
+        "predict_csv": "path/todata_predict.csv"
     }
 }

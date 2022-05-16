@@ -11,5 +11,5 @@ else:
     for x in uncleanedEndpoints:
         r.rpush(baseURL, x)
 
-# print(r.lrange(baseURL, 0, -1))
+print(r.lrange(baseURL, 0, -1))
 

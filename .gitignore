@@ -4,3 +4,5 @@ all_endpoints.txt
 crawling_output.txt
 working_endpoints.txt
 configurations.json
+ExecutingMode/DB_check.py
+ExecutionMode/executing_mode.py
