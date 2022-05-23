@@ -55,7 +55,7 @@ def check_parameter(scheme_type, URL):
     check_for_send = []
     for x in parameters:
         sending = compare_scheme(scheme_type, url, x, values[j])
-        check_for_send.extend(sending)
+        check_for_send.append(sending)
         j = j+1
     
     print("RECOMMENDATION")

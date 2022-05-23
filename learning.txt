@@ -1,0 +1,11 @@
+https://juice-shop.herokuapp.com/#/search?q=apple
+https://juice-shop.herokuapp.com/#/search?q=banana
+https://juice-shop.herokuapp.com/#/search?q=drink
+https://juice-shop.herokuapp.com/#/search?q=pie
+https://juice-shop.herokuapp.com/#/search?q=ananas
+https://juice-shop.herokuapp.com/#/search?q=bottle
+https://juice-shop.herokuapp.com/#/search?q=Eggfruit
+https://juice-shop.herokuapp.com/#/search?q=a
+https://juice-shop.herokuapp.com/#/search?q=Apple
+https://juice-shop.herokuapp.com/#/search?q=Juicejuicejuice
+https://juice-shop.herokuapp.com/#/search?q=bananacockteildrinking

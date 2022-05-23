@@ -116,6 +116,7 @@ def compare_scheme(scheme_type, URL, Param, Value):
             pos = pos + 1
 
 # counter
+    counter_check = 0
     if counter == s_counter:
         counter_check = 1
         print("The counter is completely the same as the prescription in the validation scheme.")
@@ -279,7 +280,8 @@ def compare_scheme(scheme_type, URL, Param, Value):
             length_check = 2
 # evaluate 
     print("RECOMMENDATION")
-    if (format_check == 1) and (counter_check == 1) and (length_check == 1):
+    print(format_check, counter_check, length_check)
+    if ((format_check == 1) and (counter_check == 1) and (length_check == 1)):
         return 1
     elif (format_check == 3):
         return 2

@@ -16,4 +16,4 @@ def get_baseURL():
 
 # os.system('curl -I https://www.dictionary.com/
 
-get_endpoints('https://juice-shop.herokuapp.com/')
+# get_endpoints('https://juice-shop.herokuapp.com/')

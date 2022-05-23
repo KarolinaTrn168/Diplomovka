@@ -1,8 +1,9 @@
+from enum import unique
 from SQLdb import connection_sql
 import json
+import re
 
-
-def fill_db():
+def fill_db_test():
     with open('/home/karo/Desktop/Diplomka/Diplomovka/configurations.json', encoding='utf8') as config_file:
             Config = json.load(config_file)
 
@@ -11,7 +12,6 @@ def fill_db():
     tbl_url = 'URLs'                    # will contain all URLs and IDs for them
     tbl_param = 'Parameters'            # will contain all parameters for all URLs
     tbl_val = 'Val'                     # will contain all values the parameters can have and their numeric representations
-    insertion = "INSERT INTO URLs (URL) VALUES (%s)" #parameter will be parameter from URL and its values get from logs
 
     mycursor.execute("CREATE DATABASE IF NOT EXISTS %s" % db)
     mycursor.execute("USE %s" % db)
@@ -145,4 +145,122 @@ def fill_db():
     mydb.commit()
     print(mycursor.rowcount, "was inserted.")
 
-fill_db()
+
+def fill_db_real(URL):
+    url = re.findall("(.*[a-z])/", URL)[0]
+    print("URL:")
+    print(url)
+
+    endpoints = open("working_endpoints.txt", "r")
+    parameters = []
+    values = []
+    check = 0
+    i = 0
+    for line in endpoints:
+        question_mark = re.findall("\?(.*?)=", line)
+        if question_mark:
+            parameters.extend(question_mark)
+            while check == 0:
+                question_mark_value = re.findall("=(.*?)&", line)
+                if question_mark_value:
+                    question_mark = re.findall("&(.*?)=", line)
+                    if question_mark[0] in parameters:
+                        check = 1
+                        question_mark_value = re.findall("(?s:.*)=(.*?)$", line)
+                        values.extend(question_mark_value)
+                    else:
+                        parameters.extend(question_mark)
+                        values.extend(question_mark_value)
+                    i = i+1
+                else:
+                    check = 1
+                    question_mark_value = re.findall("=(.*?)$", line)
+                    values.extend(question_mark_value)
+    parameters = list(set(parameters))
+    print("Parameters:")
+    print(parameters)
+
+    with open('/home/karo/Desktop/Diplomka/Diplomovka/configurations.json', encoding='utf8') as config_file:
+            Config = json.load(config_file)
+
+    mydb, mycursor = connection_sql.connection_sql()
+    db = Config['sql']['db_sql']
+    tbl_url = 'URLs'                    # will contain all URLs and IDs for them
+    tbl_param = 'Parameters'            # will contain all parameters for all URLs
+    tbl_val = 'Val'                     # will contain all values the parameters can have and their numeric representations
+
+    mycursor.execute("CREATE DATABASE IF NOT EXISTS %s" % db)
+    mycursor.execute("USE %s" % db)
+    # fill URL table
+    mycursor.execute("CREATE TABLE IF NOT EXISTS %s (id_url int NOT NULL AUTO_INCREMENT, URL VARCHAR(255), Scheme int, PRIMARY KEY (id_url))" % tbl_url)
+    mycursor.execute("INSERT INTO URLs (URL, Scheme) VALUES ('%s', 0);" % url)
+    mydb.commit()
+
+    url_ids = []
+    mycursor.execute("SELECT id_url FROM URLs WHERE URL = '%s' LIMIT 1" % url)
+    for x in mycursor.fetchall():
+        url_ids.extend(x)
+    url_id = url_ids[0]
+    print(url_id)
+
+    j = 0
+    # fill Parameter table
+    mycursor.execute("CREATE TABLE IF NOT EXISTS %s (id_param int NOT NULL AUTO_INCREMENT, Parameter VARCHAR(255), Scheme int, URL_id int, PRIMARY KEY (id_param), FOREIGN KEY(URL_id) REFERENCES URLs(id_url))" % tbl_param)
+    while j < len(parameters):
+        mycursor.execute("INSERT INTO Parameters (Parameter, Scheme, URL_id) VALUES ('%s', 0, %s);" % (parameters[j], url_id))
+        j = j + 1
+
+    mydb.commit()
+
+    # fill Values table
+    mycursor.execute("CREATE TABLE IF NOT EXISTS %s (id_val int NOT NULL AUTO_INCREMENT, Val VARCHAR(255), Format VARCHAR(255), Counter VARCHAR(255), Length VARCHAR(255), Scheme int, Param_id int, PRIMARY KEY (id_val), FOREIGN KEY(Param_id) REFERENCES Parameters(id_param))" % tbl_val)
+    
+    # get values data
+    prepared_values = open("learning.txt", "r")
+    
+    for line in prepared_values:
+        parameters = []
+        values = []
+        check = 0
+        i = 0
+        question_mark = re.findall("\?(.*?)=", line)
+        if question_mark:
+            parameters.extend(question_mark)
+            while check == 0:
+                question_mark_value = re.findall("=(.*?)&", line)
+                if question_mark_value:
+                    question_mark = re.findall("&(.*?)=", line)
+                    if question_mark[0] in parameters:
+                        check = 1
+                        question_mark_value = re.findall("(?s:.*)=(.*?)$", line)
+                        values.extend(question_mark_value)
+                    else:
+                        parameters.extend(question_mark)
+                        values.extend(question_mark_value)
+                    i = i+1
+                else:
+                    check = 1
+                    question_mark_value = re.findall("=(.*?)$", line)
+                    values.extend(question_mark_value)
+        print("Parameters:")
+        print(parameters)
+        print("Values:")
+        print(values)
+
+        j = 0
+        while j < len (parameters): 
+            param_ids = []
+            mycursor.execute("SELECT id_param FROM Parameters WHERE URL_id = '%s' AND Parameter = '%s' LIMIT 1" % (url_id, parameters[j]))
+            for x in mycursor.fetchall():
+                param_ids.extend(x)
+            if len(param_ids) > 0:
+                param_id = param_ids[0]
+                print(param_id)
+
+                mycursor.execute("INSERT INTO Val (Val, Format, Counter, Length, Scheme, Param_id) VALUES ('%s', '', '', '', 11, %s);" % (values[j], param_id))
+                mydb.commit()
+            else:
+                break
+            j = j + 1
+
+# fill_db_real('https://juice-shop.herokuapp.com/')

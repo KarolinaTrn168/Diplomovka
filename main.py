@@ -4,6 +4,8 @@ from ExecutingMode.get_values import check_parameter, check_url_scheme
 # from SQLdb import fill_db
 # from LearningMode.convert_params import convert_values
 from LearningMode.prepare_perform_NN import perform_NN_DT
+from LearningMode.crawling_endpoints import get_endpoints
+from SQLdb.fill_db import fill_db_real
 # from create_schema import create_scheme
 import webbrowser
 
@@ -39,6 +41,8 @@ You may continue with the Execution mode.")
                 if LM_NN == False:
                     print("Neural Network will be executed.")
                     # crawl and get data
+                    get_endpoints(URL)
+                    fill_db_real(URL)
                     perform_NN_DT('schema_NN.json')
                 if LM_NN == True & LM_DT == False:
                     print("The Learning mode was performed for the Neural Network already.\n\
@@ -48,6 +52,8 @@ If not, and you wish to go back to the main menu, press anything else.")
                     if other == 1:
                         print("Decision Tree will be executed.")
                         # crawl and get data
+                        get_endpoints(URL)
+                        fill_db_real(URL)
                         perform_NN_DT('schema_DT.json')
                     else:
                         break
@@ -56,6 +62,8 @@ If not, and you wish to go back to the main menu, press anything else.")
                 if LM_DT == False:
                     print("Decision Tree will be executed.")
                     # crawl and get data
+                    get_endpoints(URL)
+                    fill_db_real(URL)
                     perform_NN_DT('schema_DT.json')
                 if LM_NN == False & LM_DT == True:
                     print("The Learning mode was performed for the Decision Tree already.\n\
@@ -65,6 +73,8 @@ If not, and you wish to go back to the main menu, press anything else.")
                     if other == 1:
                         print("Neural Network will be executed.")
                         # crawl and get data
+                        get_endpoints(URL)
+                        fill_db_real(URL)
                         perform_NN_DT('schema_NN.json')
                     else:
                         break
